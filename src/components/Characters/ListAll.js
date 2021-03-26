@@ -60,8 +60,6 @@ export default function ListAll() {
                         </Form>
                     </Col>
                 </Row>
-
-
             </Container>
 
 
@@ -89,31 +87,7 @@ export default function ListAll() {
                 </tbody>
             </Table>
 
-            <nav>
-                <ul>
-                    {
-                        previous !== 0 && (
-                            <li className="page-item">
-                                <a className="page-link" href="#" onClick={() => previousPage()}>Précédent</a>
-                            </li>
-                        )
-                    }
-
-                    {
-
-                    }
-
-                    {
-                        next !== 0 && (
-                            <li className="page-item">
-                                <a className="page-link" href="#" onClick={() => nextPage()}>Suivant</a>
-                            </li>
-                        )
-                    }
-                </ul>
-            </nav>
-
-            {/* <PaginationCharacters current previous={previous} next={next}></PaginationCharacters> */}
+            <PaginationCharacters previous={previous} next={next} previousPage={previousPage} nextPage={nextPage} paginate={setPage} currentPage={page}></PaginationCharacters>
         </>
     )
 }
