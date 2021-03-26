@@ -88,6 +88,7 @@ export default function ListAll() {
             </Table>
 
             <PaginationCharacters previous={previous} next={next} previousPage={previousPage} nextPage={nextPage} paginate={setPage} currentPage={page}></PaginationCharacters>
+
         </>
     )
 }
