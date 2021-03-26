@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
-import { Table } from "react-bootstrap";
+import { Col, Container, Form, Row, Table } from "react-bootstrap";
 import PaginationCharacters from '../../Pagination/PaginationCharacters';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function ListAll() {
 
@@ -13,13 +15,27 @@ export default function ListAll() {
     const getResults = () => {
         fetch("https://swapi.dev/api/people/?page=" + page)
             .then(response => {
-                response.json().then(characters => {
-                    console.log(characters);
-                    setCurrentCharacters(characters.results);
-                    setNext(characters.next !== null ? characters.next.slice(-1) : 0);
-                    setPrevious(characters.previous !== null ? characters.previous.slice(-1) : 0);
-                })
+                handleResponse(response);
             })
+    }
+
+    const getBySearchedName = (searchedName) => {
+        fetch("https://swapi.dev/api/people/?search=" + searchedName)
+            .then(response => {
+                handleResponse(response);
+            })
+    }
+
+    const handleResponse = (response) => {
+        response.json().then(characters => {
+            setCurrentCharacters(characters.results);
+            setNext(characters.next !== null ? characters.next.slice(-1) : 0);
+            setPrevious(characters.previous !== null ? characters.previous.slice(-1) : 0);
+        })
+    }
+
+    const onChange = (e) => {
+        getBySearchedName(e.target.value)
     }
 
     const nextPage = () => setPage(page + 1);
@@ -32,6 +48,22 @@ export default function ListAll() {
     return (
         <>
             <h1>Voici tous les personnages de Star Wars</h1>
+
+            <Container>
+                <Row>
+                    <Col md={{ span: 5, offset: 10 }} >
+                        <Form>
+                            <Form.Group controlId="searchForm">
+                                <Form.Label><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> Cherchez votre personnage</Form.Label>
+                                <Form.Control size="sm" type="text" placeholder="Nom du personnage" onChange={onChange}></Form.Control>
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                </Row>
+
+
+            </Container>
+
 
             <Table striped bordered hover size="sm">
                 <thead>
