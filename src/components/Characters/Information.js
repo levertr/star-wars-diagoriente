@@ -24,6 +24,7 @@ function Information({history}) {
             .then(response => {
                 response.json().then(character => {
                     setCharacter(character);
+                    console.log(character);
                     getTranslatedInput(character.eye_color);
                     getStarshipsName(character.starships);
                 })
@@ -108,10 +109,10 @@ function Information({history}) {
                                     <ListGroupItem><b>Couleur des yeux : </b>{colorInFrench}</ListGroupItem>
                                     <ListGroupItem><b>Vaisseau(s) spatial(aux) piloté(s): </b>
                                         {
-                                            starships !== undefined && (
+                                            starships !== undefined && ( starships.length !== 0 ?
                                                 starships.map(s =>
                                                     <Link onClick={() => nameOnClick(s.url)}>{s.name + ', '}</Link>
-                                                )
+                                                ) : 'Aucun vaisseau'
                                             )
                                         }
                                     </ListGroupItem>

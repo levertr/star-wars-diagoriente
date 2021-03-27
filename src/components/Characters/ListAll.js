@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Card, CardDeck, Col, Container, Form, Image, Row, Table } from "react-bootstrap";
 import PaginationCharacters from '../../Pagination/PaginationCharacters';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,20 @@ function ListAll({ history }) {
     const [previous, setPrevious] = useState(0);
     const [next, setNext] = useState(0);
     const [page, setPage] = useState(1);
+    const [images, setImages] = useState([]);
+
+    const imageStyle = {
+        width: '100%',
+        height: "15vw",
+        objectFit: 'cover',
+    }
+
+    const getId = (url) => {
+        return url.substring(
+            url.lastIndexOf("people") + 7,
+            url.lastIndexOf("/")
+        );
+    }
 
     const getResults = () => {
         fetch("https://swapi.dev/api/people/?page=" + page)
@@ -29,6 +43,20 @@ function ListAll({ history }) {
             })
     }
 
+    const getImages = () => {
+        let array = [];
+        fetch("https://akabab.github.io/starwars-api/api/all.json")
+            .then(response => {
+                response.json().then(characters => {
+                    characters.map(c => {
+                        array.push({ name: c.name, image: c.image });
+                        setImages(array);
+                    })
+                })
+            })
+
+    }
+
     const handleResponse = (response) => {
         response.json().then(characters => {
             setCurrentCharacters(characters.results);
@@ -42,10 +70,7 @@ function ListAll({ history }) {
     }
 
     const nameOnClick = (url) => {
-        var id = url.substring(
-            url.lastIndexOf("people") + 7,
-            url.lastIndexOf("/")
-        );
+        var id = getId(url);
         history.push(`/character/${id}`);
     }
 
@@ -53,19 +78,25 @@ function ListAll({ history }) {
     const previousPage = () => setPage(page - 1);
 
     useEffect(() => {
+        getImages();
         getResults();
     }, [page])
 
     return (
         <>
-            <h1>Voici tous les personnages de <div className="starwarsFont">Star Wars</div></h1>
+            <h1>Voici tous les personnages de
+                <div>
+                    <img width="9%" src="https://cssanimation.rocks/demo/starwars/images/star.svg" alt="Star" ></img>
+                    <img width="9%" src="https://cssanimation.rocks/demo/starwars/images/wars.svg" alt="Wars" ></img>
+                </div>
+            </h1>
 
             <Container>
                 <Row>
-                    <Col md={{ span: 5, offset: 10 }} >
+                    <Col>
                         <Form>
                             <Form.Group controlId="searchForm">
-                                <Form.Label><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> Cherchez votre personnage</Form.Label>
+                                <Form.Label><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon> Cherchez votre personnage</Form.Label><br></br>
                                 <Form.Control size="sm" type="text" placeholder="Nom du personnage" onChange={onChange}></Form.Control>
                             </Form.Group>
                         </Form>
@@ -74,7 +105,7 @@ function ListAll({ history }) {
             </Container>
 
 
-            <Table striped bordered hover size="sm">
+            {/* <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
                         <th>Personnage</th>
@@ -89,6 +120,9 @@ function ListAll({ history }) {
                             <tr key={index}>
                                 <td>
                                     <Link onClick={() => nameOnClick(ch.url)}>{ch.name}</Link><br />
+                                    {
+                                        images !== undefined && images.filter(i => i.name === ch.name).map(i => <Image width="5%" src={i.image}></Image>)
+                                    }
                                 </td>
                                 <td>{ch.created}</td>
                                 <td>{ch.edited}</td>
@@ -96,7 +130,26 @@ function ListAll({ history }) {
                         )
                     }
                 </tbody>
-            </Table>
+            </Table> */}
+
+            <Container fluid>
+                <Row>
+                    {currentCharacters.map((ch, index) =>
+                        <Col key={index} lg={2} className="d-flex">
+                            <CardDeck>
+                                <Card style={{ width: '15rem' }} className="flex-fill" onClick={() => nameOnClick(ch.url)}>
+                                    {
+                                        images !== undefined && images.filter(i => i.name === ch.name).map(i => <Image className="card-img-top img-fluid" style={imageStyle} src={i.image}></Image>)
+                                    }
+                                    <Card.Body>
+                                        <Card.Title><Link onClick={() => nameOnClick(ch.url)}>{ch.name}</Link></Card.Title>
+                                    </Card.Body>
+                                </Card>
+                            </CardDeck>
+                        </Col>
+                    )}
+                </Row>
+            </Container>
 
             <PaginationCharacters previous={previous} next={next} previousPage={previousPage} nextPage={nextPage} paginate={setPage} currentPage={page}></PaginationCharacters>
 

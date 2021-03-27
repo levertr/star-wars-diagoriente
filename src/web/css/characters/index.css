@@ -6,3 +6,8 @@
     -webkit-text-stroke-width: 2px;
     color: black;
 }
+
+.form-control {
+    width: 30% !important;
+    display: initial !important
+}

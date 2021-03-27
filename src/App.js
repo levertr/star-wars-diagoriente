@@ -14,7 +14,6 @@ import { faHome, faListUl } from '@fortawesome/free-solid-svg-icons';
 function App() {
   return (
     <div className="App">
-      
       <Navbar>
         <Navbar.Brand><div className="navBrand">STAR WARS APi</div></Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
