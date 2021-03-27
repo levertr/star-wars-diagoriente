@@ -61,7 +61,7 @@ function Information({history}) {
         let iterations = array.length;
 
         if (array) {
-            array.map((url, index) => {
+            array.map(url => {
                 fetch(url)
                     .then(response => {
                         response.json().then(starship => {
@@ -104,7 +104,7 @@ function Information({history}) {
                                 <ListGroup>
                                     <ListGroupItem><b>Nom : </b>{character.name}</ListGroupItem>
                                     <ListGroupItem><b>Genre : </b>{character.gender !== undefined && character.gender.charAt(0).toUpperCase() + character.gender.slice(1)}</ListGroupItem>
-                                    <ListGroupItem><b>Année de naissance : </b>{character.birth_year}</ListGroupItem>
+                                    <ListGroupItem><b>Année de naissance : </b>{character.birth_year === 'unknown' ? 'Inconnue' : character.birth_year}</ListGroupItem>
                                     <ListGroupItem><b>Couleur des yeux : </b>{colorInFrench}</ListGroupItem>
                                     <ListGroupItem><b>Vaisseau(s) spatial(aux) piloté(s): </b>
                                         {
