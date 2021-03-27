@@ -4,7 +4,8 @@ import { Route, Switch, NavLink, Link } from 'react-router-dom'
 import Home from './components/Home/Home';
 import ListAll from './components/Characters/ListAll';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Information from './components/Characters/Information';
+import InformationCharacter from './components/Characters/Information';
+import InformationStarship from './components/Starships/Information';
 import { Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -39,7 +40,11 @@ function App() {
         </Route>
 
         <Route exact path="/character/:id">
-          <Information></Information>
+          <InformationCharacter></InformationCharacter>
+        </Route>
+
+        <Route exact path="/starship/:id">
+          <InformationStarship></InformationStarship>
         </Route>
       </Switch>
     </div>
