@@ -4,8 +4,11 @@ import { Col, Container, Form, Row, Table } from "react-bootstrap";
 import PaginationCharacters from '../../Pagination/PaginationCharacters';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+import '../../web/css/characters/index.css';
 
-export default function ListAll() {
+function ListAll({ history }) {
 
     const [currentCharacters, setCurrentCharacters] = useState([]);
     const [previous, setPrevious] = useState(0);
@@ -38,6 +41,14 @@ export default function ListAll() {
         getBySearchedName(e.target.value)
     }
 
+    const nameOnClick = (url) => {
+        var id = url.substring(
+            url.lastIndexOf("people") + 7,
+            url.lastIndexOf("/")
+        );
+        history.push(`/character/${id}`);
+    }
+
     const nextPage = () => setPage(page + 1);
     const previousPage = () => setPage(page - 1);
 
@@ -47,7 +58,7 @@ export default function ListAll() {
 
     return (
         <>
-            <h1>Voici tous les personnages de Star Wars</h1>
+            <h1>Voici tous les personnages de <div className="starwarsFont">Star Wars</div></h1>
 
             <Container>
                 <Row>
@@ -77,7 +88,7 @@ export default function ListAll() {
                         currentCharacters.map((ch, index) =>
                             <tr key={index}>
                                 <td>
-                                    {ch.name}<br />
+                                    <Link onClick={() => nameOnClick(ch.url)}>{ch.name}</Link><br />
                                 </td>
                                 <td>{ch.created}</td>
                                 <td>{ch.edited}</td>
@@ -92,3 +103,5 @@ export default function ListAll() {
         </>
     )
 }
+
+export default withRouter(ListAll);

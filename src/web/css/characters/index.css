@@ -1,0 +1,8 @@
+.starwarsFont {
+    font-family: Starjedi;
+    font-size: larger;
+    font-weight: bold;
+    -webkit-text-stroke-color: #ffe81f;
+    -webkit-text-stroke-width: 2px;
+    color: black;
+}
