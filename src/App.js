@@ -10,6 +10,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faListUl } from '@fortawesome/free-solid-svg-icons';
+import ReverseGeocoding from './components/SSI/ReverseGeocoding';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
 
             <LinkContainer to="/characters/all">
               <Nav.Link><FontAwesomeIcon icon={faListUl}></FontAwesomeIcon> Liste des personnages</Nav.Link>
+            </LinkContainer>
+
+            <LinkContainer to="/geocoding">
+              <Nav.Link> Position du SSI</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
@@ -44,6 +49,10 @@ function App() {
 
         <Route exact path="/starship/:id">
           <InformationStarship></InformationStarship>
+        </Route>
+
+        <Route exact path="/geocoding">
+          <ReverseGeocoding></ReverseGeocoding>
         </Route>
       </Switch>
     </div>

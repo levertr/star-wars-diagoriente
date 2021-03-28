@@ -104,34 +104,6 @@ function ListAll({ history }) {
                 </Row>
             </Container>
 
-
-            {/* <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th>Personnage</th>
-                        <th>Créé le</th>
-                        <th>Derniere modification le</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {
-                        currentCharacters.map((ch, index) =>
-                            <tr key={index}>
-                                <td>
-                                    <Link onClick={() => nameOnClick(ch.url)}>{ch.name}</Link><br />
-                                    {
-                                        images !== undefined && images.filter(i => i.name === ch.name).map(i => <Image width="5%" src={i.image}></Image>)
-                                    }
-                                </td>
-                                <td>{ch.created}</td>
-                                <td>{ch.edited}</td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </Table> */}
-
             <Container fluid>
                 <Row>
                     {currentCharacters.map((ch, index) =>
