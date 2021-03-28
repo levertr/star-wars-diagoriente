@@ -43,18 +43,11 @@ export default function ReverseGeocoding() {
             });
     }
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-            
-    //     }, interval);
-    //     getIssPosition();
-    // }, [])
-
     useEffect(() => {
         // getIssPosition();
         // const interval = setInterval(() => {
         //     getIssPosition();
-        // }, 15000);
+        // }, 10000);
         // return () => {
         //     clearInterval(interval);
         // }
