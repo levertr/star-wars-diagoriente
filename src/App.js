@@ -1,20 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-import { Route, Switch, NavLink, Link } from 'react-router-dom'
-import Home from './components/Home/Home';
-import ListAll from './components/Characters/ListAll';
+import { faHome, faListUl, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InformationCharacter from './components/Characters/Information';
-import InformationStarship from './components/Starships/Information';
 import { Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faListUl } from '@fortawesome/free-solid-svg-icons';
+import { Route, Switch } from 'react-router-dom';
+import './App.css';
+import InformationCharacter from './components/Characters/Information';
+import ListAll from './components/Characters/ListAll';
+import Home from './components/Home/Home';
 import ReverseGeocoding from './components/SSI/ReverseGeocoding';
+import InformationStarship from './components/Starships/Information';
 
 function App() {
   return (
     <div className="App">
+
+      {/* Barre de navigation de l'application */}
       <Navbar>
         <Navbar.Brand><div className="navBrand">STAR WARS APi</div></Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
@@ -28,12 +29,13 @@ function App() {
             </LinkContainer>
 
             <LinkContainer to="/geocoding">
-              <Nav.Link> Position du SSI</Nav.Link>
+              <Nav.Link><FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon> Position du SSI</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
 
+      {/* Switch contenant toutes les routes de l'application */}
       <Switch>
         <Route exact path="/">
           <Home></Home>
@@ -55,6 +57,7 @@ function App() {
           <ReverseGeocoding></ReverseGeocoding>
         </Route>
       </Switch>
+      
     </div>
   );
 }

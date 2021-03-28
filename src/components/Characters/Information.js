@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
+import moment from 'moment';
+import 'moment/locale/fr';
+import { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Jumbotron, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useParams, withRouter } from "react-router";
-import moment from 'moment';
-import 'moment/locale/fr'
 import { Link } from "react-router-dom";
 
-function Information({history}) {
+function Information({ history }) {
     const params = useParams();
 
     const [character, setCharacter] = useState({});
@@ -13,33 +13,15 @@ function Information({history}) {
     const [colorInFrench, setColorInFrench] = useState("");
     const [starships, setStarships] = useState([]);
 
+    // Utilisation de moment pour les dates
     moment.locale();
 
+    // Fonction qui écrit la date récupérée en français
     const getTimeInFrench = (string) => {
         return moment(new Date(string)).format('dddd D MMMM YYYY à LTS');
     }
 
-    const getCharacter = () => {
-        fetch("https://swapi.dev/api/people/" + params.id)
-            .then(response => {
-                response.json().then(character => {
-                    setCharacter(character);
-                    console.log(character);
-                    getTranslatedInput(character.eye_color);
-                    getStarshipsName(character.starships);
-                })
-            })
-    }
-
-    const getImage = () => {
-        fetch("https://akabab.github.io/starwars-api/api/id/" + params.id + ".json")
-            .then(response => {
-                response.json().then(character => {
-                    setImage(character.image);
-                })
-            })
-    }
-
+    // Fonction utilisant une API de traduction pour la couleur des yeux
     const getTranslatedInput = (input) => {
         if (input !== "" && input !== undefined) {
             fetch("https://libretranslate.com/translate", {
@@ -57,12 +39,13 @@ function Information({history}) {
         }
     }
 
+    // Fonction récupérant tous les vaisseaux du personnage
     const getStarshipsName = (array) => {
         var stringArray = [];
         let iterations = array.length;
 
         if (array) {
-            array.map(url => {
+            array.map(url =>
                 fetch(url)
                     .then(response => {
                         response.json().then(starship => {
@@ -72,10 +55,11 @@ function Information({history}) {
                             }
                         })
                     })
-            })
+            )
         }
     }
 
+    // Fonction permettant le routage du vaisseau lors du clic sur le nom de ce dernier
     const nameOnClick = (url) => {
         var id = url.substring(
             url.lastIndexOf("starships") + 10,
@@ -84,10 +68,28 @@ function Information({history}) {
         history.push(`/starship/${id}`);
     }
 
+    // Récupération des infos du personnage ainsi que son image
     useEffect(() => {
-        getCharacter();
-        getImage();
-    }, [])
+
+        // Fonction récupérant les informations du personnage
+        fetch("https://swapi.dev/api/people/" + params.id)
+            .then(response => {
+                response.json().then(character => {
+                    setCharacter(character);
+                    getTranslatedInput(character.eye_color);
+                    getStarshipsName(character.starships);
+                })
+            })
+
+
+        // Fonction utilisant une API qui récupère un lien vers une image selon le nom du personnage
+        fetch("https://akabab.github.io/starwars-api/api/id/" + params.id + ".json")
+            .then(response => {
+                response.json().then(character => {
+                    setImage(character.image);
+                })
+            })
+    }, [params.id])
 
     return (
         <>
@@ -109,9 +111,9 @@ function Information({history}) {
                                     <ListGroupItem><b>Couleur des yeux : </b>{colorInFrench}</ListGroupItem>
                                     <ListGroupItem><b>Vaisseau(s) spatial(aux) piloté(s): </b>
                                         {
-                                            starships !== undefined && ( starships.length !== 0 ?
+                                            starships !== undefined && (starships.length !== 0 ?
                                                 starships.map(s =>
-                                                    <Link onClick={() => nameOnClick(s.url)}>{s.name + ', '}</Link>
+                                                    <Link key={s.name} to="#" onClick={() => nameOnClick(s.url)}>{s.name + ', '}</Link>
                                                 ) : 'Aucun vaisseau'
                                             )
                                         }

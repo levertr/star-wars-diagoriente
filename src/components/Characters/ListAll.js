@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
-import { Card, CardDeck, Col, Container, Form, Image, Row, Table } from "react-bootstrap";
-import PaginationCharacters from '../../Pagination/PaginationCharacters';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { Card, CardDeck, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
+import PaginationCharacters from '../../Pagination/PaginationCharacters';
 import '../../web/css/characters/index.css';
 
 function ListAll({ history }) {
@@ -22,6 +22,7 @@ function ListAll({ history }) {
         objectFit: 'cover',
     }
 
+    // Fonction récupérant l'id d'un personnage selon son url de l'API
     const getId = (url) => {
         return url.substring(
             url.lastIndexOf("people") + 7,
@@ -29,13 +30,9 @@ function ListAll({ history }) {
         );
     }
 
-    const getResults = () => {
-        fetch("https://swapi.dev/api/people/?page=" + page)
-            .then(response => {
-                handleResponse(response);
-            })
-    }
 
+
+    // Fonction récupérant les personnages selon la recherche effectuée
     const getBySearchedName = (searchedName) => {
         fetch("https://swapi.dev/api/people/?search=" + searchedName)
             .then(response => {
@@ -43,20 +40,9 @@ function ListAll({ history }) {
             })
     }
 
-    const getImages = () => {
-        let array = [];
-        fetch("https://akabab.github.io/starwars-api/api/all.json")
-            .then(response => {
-                response.json().then(characters => {
-                    characters.map(c => {
-                        array.push({ name: c.name, image: c.image });
-                        setImages(array);
-                    })
-                })
-            })
 
-    }
 
+    // Fonction qui gère le fonctionnant de la réponse d'une requête de l'API Star Wars utilisée
     const handleResponse = (response) => {
         response.json().then(characters => {
             setCurrentCharacters(characters.results);
@@ -65,10 +51,12 @@ function ListAll({ history }) {
         })
     }
 
+
     const onChange = (e) => {
         getBySearchedName(e.target.value)
     }
 
+    // Fonctionnant permettant le routage d'un personnage lors du clic de ce dernier
     const nameOnClick = (url) => {
         var id = getId(url);
         history.push(`/character/${id}`);
@@ -77,9 +65,30 @@ function ListAll({ history }) {
     const nextPage = () => setPage(page + 1);
     const previousPage = () => setPage(page - 1);
 
+    // Récupération des images et des résultats à chaque changement de page
     useEffect(() => {
-        getImages();
-        getResults();
+        // Fonction récupérants les images grâce à une API extérieure
+
+        let array = [];
+        fetch("https://akabab.github.io/starwars-api/api/all.json")
+            .then(response => {
+                response.json().then(characters => {
+                    characters.forEach(c => {
+                        // J'ajoute un objet le nom du personnage et son lien vers l'image dans un tableau utilisé plus tard dans le render
+                        array.push({ name: c.name, image: c.image });
+                        setImages(array);
+                    })
+                })
+            })
+
+
+        // Fonction récupérants 10 personnages selon la page où on se trouve
+
+        fetch("https://swapi.dev/api/people/?page=" + page)
+            .then(response => {
+                handleResponse(response);
+            })
+
     }, [page])
 
     return (
@@ -108,13 +117,13 @@ function ListAll({ history }) {
                 <Row>
                     {currentCharacters.map((ch, index) =>
                         <Col key={index} lg={2} className="d-flex">
-                            <CardDeck>
+                            <CardDeck key={index}>
                                 <Card style={{ width: '15rem' }} className="flex-fill" onClick={() => nameOnClick(ch.url)}>
                                     {
-                                        images !== undefined && images.filter(i => i.name === ch.name).map(i => <Image className="card-img-top img-fluid" style={imageStyle} src={i.image}></Image>)
+                                        images !== undefined && images.filter(i => i.name === ch.name).map((i, index) => <Image key={index} className="card-img-top img-fluid" style={imageStyle} src={i.image}></Image>)
                                     }
                                     <Card.Body>
-                                        <Card.Title><Link onClick={() => nameOnClick(ch.url)}>{ch.name}</Link></Card.Title>
+                                        <Card.Title><Link onClick={() => nameOnClick(ch.url)} to="#">{ch.name}</Link></Card.Title>
                                     </Card.Body>
                                 </Card>
                             </CardDeck>
@@ -124,7 +133,6 @@ function ListAll({ history }) {
             </Container>
 
             <PaginationCharacters previous={previous} next={next} previousPage={previousPage} nextPage={nextPage} paginate={setPage} currentPage={page}></PaginationCharacters>
-
         </>
     )
 }

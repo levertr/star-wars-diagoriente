@@ -1,11 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect } from "react"
-import { Col, Container, Pagination, Row } from "react-bootstrap";
+import { Pagination } from "react-bootstrap";
 
 export default function PaginationCharacters(props) {
-
-    useEffect(() => {
-    }, [props])
 
     const pageNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -25,9 +21,9 @@ export default function PaginationCharacters(props) {
                     }
 
                     {
-                        pageNumbers.map(page => (
+                        pageNumbers.map(page => 
                             <Pagination.Item key={page} active={props.currentPage === page} onClick={() => props.paginate(page)}>{page}</Pagination.Item>
-                        ))
+                        )
                     }
 
                     {
@@ -36,7 +32,6 @@ export default function PaginationCharacters(props) {
                         )
                     }
                 </Pagination>
-
             }
         </>
     )
